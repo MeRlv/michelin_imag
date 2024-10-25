@@ -1,1 +1,0 @@
-# michelin_imag
