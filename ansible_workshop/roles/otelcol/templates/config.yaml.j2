@@ -1,0 +1,28 @@
+receivers:
+    otlp:
+        protocols:
+            http: 
+                endpoint: localhost:{{ otel_http_receiver_port }}
+
+exporters:
+    prometheus:
+        endpoint: localhost:{{ otel_prometheus_exporter_port }}
+        namespace: default
+
+    otlphttp/loki:
+        endpoint: http://localhost:{{ loki_port }}/otlp/v1/logs
+
+    otlp:
+      endpoint: localhost:{{ tempo_port }}
+
+service:
+    pipelines:
+        metrics:
+            receivers: [otlp]
+            exporters: [prometheus]
+        logs:
+            receivers: [otlp]
+            exporters: [otlphttp/loki]
+        traces:
+            receivers: [otlp]
+            exporters: [otlp]
